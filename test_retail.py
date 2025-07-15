@@ -8,7 +8,7 @@ from lib.ConfigReader import get_app_config
 def test_customerdf_count(spark):
     customer_count = read_customers(spark, "LOCAL").count()
     assert customer_count == 12435
-
+#
 @pytest.mark.slow
 def test_orders_data(spark):
     orders_count = read_orders(spark, "LOCAL").count()
