@@ -1,23 +1,24 @@
 pipeline {
     agent any
-    
+
     environment {
         LABS = credentials('labcreds')
         JAVA_HOME = '/opt/bitnami/java'
         PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
     }
-    
+
     stages {
-        stage('Install pipenv') {
+        stage('Setup Virtual Environment') {
             steps {
-                sh 'pip install --upgrade pip'
-                sh 'pip install pipenv'
+                sh 'python3 -m venv retail_pipeline_venv'
+                sh './retail_pipeline_venv/bin/pip install --upgrade pip'
+                sh './retail_pipeline_venv/bin/pip install pipenv'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                sh 'pipenv install'
+                sh './retail_pipeline_venv/bin/pipenv install'
             }
         }
 
@@ -25,7 +26,7 @@ pipeline {
             steps {
                 sh 'echo $JAVA_HOME'
                 sh 'echo $PATH'
-                sh 'pipenv run pytest'
+                sh './retail_pipeline_venv/bin/pipenv run pytest'
             }
         }
 
